@@ -14,6 +14,7 @@ export const GlobalProvider = ({ children }) => {
     const [addProductError, setAddProductError] = useState(null);
     const [addCarError, setAddCarError] = useState(null);
     const [cartItems, setCartItems] = useState([]);
+    
 
     const addToCart = (product) => {
         setCartItems([...cartItems, product]);
@@ -24,7 +25,6 @@ export const GlobalProvider = ({ children }) => {
         setCartItems(updatedCart);
     };
 
-    // OBTENER DATOS USUARIOS
     const getDeveloperData = () => {
         const token = window.sessionStorage.getItem("token");
         if (token) {
@@ -46,7 +46,6 @@ export const GlobalProvider = ({ children }) => {
         getDeveloperData();
     }, [setDeveloper]);
 
-    // OBTENER CATALGO
     const getProductData = async () => {
         try {
             const response = await axios.get(ENDPOINT.product);
@@ -60,7 +59,6 @@ export const GlobalProvider = ({ children }) => {
         getProductData();
     }, []);
 
-    // Función para editar usuarios
     const editUser = async (userData) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -71,13 +69,11 @@ export const GlobalProvider = ({ children }) => {
                 setEditUserError(null);
             }
         } catch (error) {
-            // Manejar errores al editar usuarios
             setEditUserError(error);
             console.error("Error al editar usuario:", error);
         }
     };
 
-    // Función para agregar productos
     const addProduct = async (productData) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -90,13 +86,27 @@ export const GlobalProvider = ({ children }) => {
                 getProductData();
             }
         } catch (error) {
-            // Manejar errores al agregar productos
             setAddProductError(error);
             console.error("Error al agregar producto:", error);
         }
     };
 
-    // Función para obtener productos por correo electrónico
+   const editProduct = async (productId, productData) => {
+    try {
+        const token = window.sessionStorage.getItem("token");
+        if (token) {
+            await axios.put(`${ENDPOINT.editProduct}/${productId}`, productData, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setAddProductError(null);
+            getProductData();
+        }
+    } catch (error) {
+        setAddProductError(error);
+        console.error("Error al editar producto:", error);
+    }
+};
     const getProductByEmail = async (email) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -118,6 +128,8 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
+
+
     const deleteProductById = async (productId) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -136,6 +148,24 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
+    const deleteFavoriteById = async (favoriteId) => {
+        try {
+            const token = window.sessionStorage.getItem("token");
+            if (token) {
+                await axios.delete(`${ENDPOINT.deleteFavorites}/${favoriteId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const updatedFavorites = favorites.filter(
+                    (favorite) => favorite.favorito_id !== favoriteId
+                );
+                setFavorites(updatedFavorites);
+            }
+        } catch (error) {
+            console.error("Error al eliminar favorito:", error);
+            throw error;
+        }
+    };
+
     const addFavorite = async (productId) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -147,7 +177,6 @@ export const GlobalProvider = ({ children }) => {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
-                // Actualizar el estado de productos para reflejar el cambio
                 getProductData();
             }
         } catch (error) {
@@ -155,45 +184,26 @@ export const GlobalProvider = ({ children }) => {
             throw error;
         }
     };
-
-    const getFavorites = async (email) => {
-        try {
-            const token = window.sessionStorage.getItem("token");
-            if (token) {
-                const response = await axios.get(
-                    `${ENDPOINT.getFavorites}?email=${email}`,
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
-                );
-                setFavorites(response.data);
-            }
-        } catch (error) {
-            console.error("Error al obtener favoritos:", error);
-            throw error;
-        }
-    };
-
-    const deleteFavById = async (productId) => {
-        try {
-            const token = window.sessionStorage.getItem("token");
-            if (token) {
-                await axios.delete(`${ENDPOINT.deleteFavorites}/${productId}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-
-                // Actualizar la lista de favoritos después de la eliminación
-                const updatedFavorites = favorites.filter(
-                    (favorite) => favorite.producto_id !== productId
-                );
-                setFavorites(updatedFavorites);
-            }
-        } catch (error) {
-            console.error("Error al eliminar producto favorito:", error);
-            throw error;
-        }
-    };
-
+    // Función para obtener favoritos por email
+    // const getFavorites = async (email) => {
+    //     try {
+    //         const token = window.sessionStorage.getItem("token");
+    //         if (token) {
+    //             const response = await axios.get(`${ENDPOINT.getFavorites}`,               
+    //                 {
+    //                     headers: { Authorization: `Bearer ${token}` },
+    //                     params: { email: getDeveloper.email  }
+    //                 }
+    //             );
+    //             return response.data;
+    //         } else {
+    //             throw new Error("Token no encontrado");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error al obtener favoritos:", error);
+    //         throw error;
+    //     }
+    // };
     const insertarAlCarro = async (carroItem) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -205,7 +215,7 @@ export const GlobalProvider = ({ children }) => {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
-                console.log(response.data); // Mensaje de éxito desde el servidor
+                console.log(response.data);
             }
         } catch (error) {
             console.error(
@@ -213,17 +223,14 @@ export const GlobalProvider = ({ children }) => {
                 error
             );
             if (error.response) {
-                // Error de respuesta del servidor (status code fuera de 2xx)
                 console.error("Status:", error.response.status);
                 console.error("Data:", error.response.data);
             } else if (error.request) {
-                // Error de solicitud (no se recibió respuesta del servidor)
                 console.error(
                     "No se recibió respuesta del servidor:",
                     error.request
                 );
             } else {
-                // Otro tipo de error
                 console.error("Error inesperado:", error.message);
             }
             throw error;
@@ -233,8 +240,6 @@ export const GlobalProvider = ({ children }) => {
     const login = async (user, navigate) => {
         try {
             const { data } = await axios.post(ENDPOINT.login, user);
-            console.log("Token del usuario:", data.token);
-            console.log("Datos del usuario:", data);
             window.sessionStorage.setItem("token", data.token);
             setDeveloper({});
             navigate("/collection");
@@ -242,7 +247,6 @@ export const GlobalProvider = ({ children }) => {
             const {
                 response: { data },
             } = error;
-            console.error(data);
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -255,12 +259,13 @@ export const GlobalProvider = ({ children }) => {
     const registerUser = async (userData) => {
         try {
             const { data } = await axios.post(ENDPOINT.users, userData);
-            setDeveloper(data); // Assuming the response from the backend contains the user data
-            return data; // Optionally return data if needed in the component
+            setDeveloper(data);
+            return data;
         } catch (error) {
-            throw error.response.data; // Throw error to handle in the component
+            throw error.response.data;
         }
     };
+
     return (
         <GlobalContext.Provider
             value={{
@@ -276,8 +281,8 @@ export const GlobalProvider = ({ children }) => {
                 getProductByEmail,
                 deleteProductById,
                 addFavorite,
-                getFavorites,
-                deleteFavById,
+                // getFavorites,
+                deleteFavoriteById,
                 addCarError,
                 addToCart,
                 cartItems,
@@ -285,6 +290,7 @@ export const GlobalProvider = ({ children }) => {
                 insertarAlCarro,
                 login,
                 registerUser,
+                editProduct
             }}
         >
             <Context.Provider
@@ -301,8 +307,8 @@ export const GlobalProvider = ({ children }) => {
                     getProductByEmail,
                     deleteProductById,
                     addFavorite,
-                    getFavorites,
-                    deleteFavById,
+                    // getFavorites,
+                    deleteFavoriteById,
                     addCarError,
                     addToCart,
                     cartItems,
@@ -310,6 +316,7 @@ export const GlobalProvider = ({ children }) => {
                     insertarAlCarro,
                     login,
                     registerUser,
+                    editProduct
                 }}
             >
                 {children}

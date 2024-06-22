@@ -1,10 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { validarRut } from "../utils/validarRut";
 
 const Cart = () => {
     const { cartItems, removeItemFromCart, insertarAlCarro } =
         useContext(GlobalContext);
+    const navigate = useNavigate();
     const [totalValue, setTotalValue] = useState(0);
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState({
@@ -18,10 +21,11 @@ const Cart = () => {
         direccion: "",
         domicilio: "",
         departamento: "",
+        metodoPago: "",
+        producto_id: "",
     });
 
-    // Calcula el total del carrito cuando cambian los items
-    useState(() => {
+    useEffect(() => {
         let total = 0;
         cartItems.forEach((item) => {
             total += item.valor;
@@ -29,7 +33,6 @@ const Cart = () => {
         setTotalValue(total);
     }, [cartItems]);
 
-    // Función para formatear valores a moneda
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat("es-CL", {
             style: "currency",
@@ -37,25 +40,119 @@ const Cart = () => {
         }).format(amount);
     };
 
-    // Maneja el cambio de inputs en el formulario
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
+        if (name === "rut") {
+            setFormData({
+                ...formData,
+                [name]: formatoRut(value),
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        }
+    };
+
+    const formatoRut = (rut) => {
+        rut = rut.replace(/[^\dkK.-]/g, ""); // Eliminar caracteres no válidos
+        let cleanedRut = rut.replace(/[^0-9kK]/g, ""); // Quitar todo excepto números y K
+        if (cleanedRut.length > 1) {
+            cleanedRut =
+                cleanedRut.substring(0, cleanedRut.length - 1) +
+                "-" +
+                cleanedRut.substring(cleanedRut.length - 1);
+        }
+        return cleanedRut;
+    };
+
+    const validateFields = () => {
+        const {
+            nombre,
+            apellido,
+            rut,
+            email,
+            numero,
+            region,
+            comuna,
+            direccion,
+            domicilio,
+            metodoPago,
+        } = formData;
+
+        if (!nombre) {
+            showError("Nombre");
+            return false;
+        }
+        if (!apellido) {
+            showError("Apellido");
+            return false;
+        }
+        if (!rut) {
+            showError("Rut");
+            return false;
+        }
+        if (!email) {
+            showError("Email");
+            return false;
+        }
+        if (!numero) {
+            showError("Número");
+            return false;
+        }
+        if (!region) {
+            showError("Región");
+            return false;
+        }
+        if (!comuna) {
+            showError("Comuna");
+            return false;
+        }
+        if (!direccion) {
+            showError("Dirección");
+            return false;
+        }
+        if (!domicilio) {
+            showError("Domicilio");
+            return false;
+        }
+        if (!metodoPago) {
+            showError("Método de Pago");
+            return false;
+        }
+        if (!validarRut(rut)) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "El RUT ingresado no es válido.",
+            });
+            return false;
+        }
+        return true;
+    };
+
+    const showError = (campo) => {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: `Por favor complete el campo ${campo}.`,
         });
     };
 
-      // Handle the insertion of the item in the cart
-      const handleInsertItem = async (productId) => {
+    const handleInsertItem = async (productId) => {
+        if (!validateFields()) {
+            return;
+        }
+
         try {
             const result = await Swal.fire({
-                title: '¿Está seguro?',
+                title: "¿Está seguro?",
                 text: "Se enviará la información al correo proporcionado para realizar la compra.",
-                icon: 'warning',
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Sí, confirmar',
-                cancelButtonText: 'Cancelar'
+                confirmButtonText: "Sí, confirmar",
+                cancelButtonText: "Cancelar",
             });
 
             if (result.isConfirmed) {
@@ -65,11 +162,10 @@ const Cart = () => {
                 };
                 await insertarAlCarro(itemToAdd);
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Compra confirmada',
-                    text: `La información se ha enviado al correo: ${formData.email}`
+                    icon: "success",
+                    title: "Compra confirmada",
+                    text: `La información se ha enviado al correo: ${formData.email}`,
                 });
-                // Clear the form after successful insertion
                 setFormData({
                     nombre: "",
                     apellido: "",
@@ -83,20 +179,21 @@ const Cart = () => {
                     departamento: "",
                     metodoPago: "",
                 });
-                setTotalValue(0); // Reset totalValue if necessary
+                setTotalValue(0);
+                removeItemFromCart(productId);
+                navigate("/collection");
             }
         } catch (error) {
             console.error("Error al insertar ítem en el carrito:", error);
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al insertar ítem en el carrito.'
+                icon: "error",
+                title: "Error",
+                text: "Error al insertar ítem en el carrito.",
             });
         }
     };
 
     useEffect(() => {
-        // Initialize SmartWizard when component mounts
         $(document).ready(function () {
             $("#smartwizard").smartWizard({
                 selected: currentStep,
@@ -120,29 +217,18 @@ const Cart = () => {
                     next: "Siguiente",
                     previous: "Anterior",
                 },
-                // Event fired when user goes to next/previous tab
-                onLeaveStep: function (toStep, fromStep) {
-                    setCurrentStep(toStep); // Update currentStep state
-                    return validateSteps(fromStep); // Return true/false based on validation
+                onLeaveStep: function (fromStep, toStep, context) {
+                    if (fromStep < toStep) {
+                        return validateFields();
+                    }
+                    return true;
+                },
+                onShowStep: function (stepObj, context) {
+                    setCurrentStep(stepObj.index);
                 },
             });
-            function validateSteps(step) {
-                // Example validation logic based on step
-                if (step === 0) {
-                    // Validation for step 1 (contact information)
-                    // Implement your validation logic here
-                    return true; // Return true if validation passes
-                } else if (step === 1) {
-                    // Validation for step 2 (shipping information)
-                    // Implement your validation logic here
-                    return true; // Return true if validation passes
-                }
-                // Add more conditions for additional steps if needed
-                return true; // Default to true if no specific validation required
-            }
         });
-    }, [currentStep]); // Only re-run effect if currentStep changes
-    // Renderiza el componente
+    }, [currentStep]);
 
     return (
         <div className="mt-4">
@@ -389,7 +475,12 @@ const Cart = () => {
                         <div className="row d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-10">
                                 <div className="inputCart form-group">
-                                    <label>Departamento (Opcional)</label>
+                                    <label>
+                                        Departamento{" "}
+                                        <span style={{ color: "red" }}>
+                                            ( )
+                                        </span>
+                                    </label>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -402,74 +493,105 @@ const Cart = () => {
                         </div>
                     </div>
                     {/* STEP 3: PAGO */}
-                    <div id="step-3" className="tab-pane" role="tabpanel" aria-labelledby="step-3">
-  <div className="col-md-12">
-    <h4>Método de Pago</h4>
-  </div>
-  <div className="row d-flex justify-content-center">
-    <div className="col-sm-12 col-md-6 col-lg-5">
-      <div className="form-group">
-        <label>Seleccione el método de pago <span style={{ color: "red" }}>*</span></label>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="metodoPago"
-            id="tarjetaCredito"
-            value="Tarjeta de Crédito"
-            checked={formData.metodoPago === "Tarjeta de Crédito"}
-            onChange={handleInputChange}
-          />
-          <label className="form-check-label" htmlFor="tarjetaCredito">
-            Tarjeta de Crédito
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="metodoPago"
-            id="tarjetaDebito"
-            value="Tarjeta de Débito"
-            checked={formData.metodoPago === "Tarjeta de Débito"}
-            onChange={handleInputChange}
-          />
-          <label className="form-check-label" htmlFor="tarjetaDebito">
-            Tarjeta de Débito
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="metodoPago"
-            id="paypal"
-            value="PayPal"
-            checked={formData.metodoPago === "PayPal"}
-            onChange={handleInputChange}
-          />
-          <label className="form-check-label" htmlFor="paypal">
-            PayPal
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="metodoPago"
-            id="transferenciaBancaria"
-            value="Transferencia Bancaria"
-            checked={formData.metodoPago === "Transferencia Bancaria"}
-            onChange={handleInputChange}
-          />
-          <label className="form-check-label" htmlFor="transferenciaBancaria">
-            Transferencia Bancaria
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                    <div
+                        id="step-3"
+                        className="tab-pane"
+                        role="tabpanel"
+                        aria-labelledby="step-3"
+                    >
+                        <div className="col-md-12">
+                            <h4>Método de Pago</h4>
+                        </div>
+                        <div className="row d-flex justify-content-center">
+                            <div className="col-sm-12 col-md-6 col-lg-5">
+                                <div className="form-group">
+                                    <label>
+                                        Seleccione el método de pago{" "}
+                                        <span style={{ color: "red" }}>*</span>
+                                    </label>
+                                    <div className="form-check">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="metodoPago"
+                                            id="tarjetaCredito"
+                                            value="Tarjeta de Crédito"
+                                            checked={
+                                                formData.metodoPago ===
+                                                "Tarjeta de Crédito"
+                                            }
+                                            onChange={handleInputChange}
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor="tarjetaCredito"
+                                        >
+                                            Tarjeta de Crédito
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="metodoPago"
+                                            id="tarjetaDebito"
+                                            value="Tarjeta de Débito"
+                                            checked={
+                                                formData.metodoPago ===
+                                                "Tarjeta de Débito"
+                                            }
+                                            onChange={handleInputChange}
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor="tarjetaDebito"
+                                        >
+                                            Tarjeta de Débito
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="metodoPago"
+                                            id="paypal"
+                                            value="PayPal"
+                                            checked={
+                                                formData.metodoPago === "PayPal"
+                                            }
+                                            onChange={handleInputChange}
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor="paypal"
+                                        >
+                                            PayPal
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="metodoPago"
+                                            id="transferenciaBancaria"
+                                            value="Transferencia Bancaria"
+                                            checked={
+                                                formData.metodoPago ===
+                                                "Transferencia Bancaria"
+                                            }
+                                            onChange={handleInputChange}
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor="transferenciaBancaria"
+                                        >
+                                            Transferencia Bancaria
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* STEP 4 Resumen */}
                     <div
@@ -492,10 +614,19 @@ const Cart = () => {
                                 <tbody>
                                     {cartItems.map((item) => (
                                         <tr key={item.id}>
-                                            <td className="align-middle">{item.nombre}</td>
                                             <td className="align-middle">
-                <img src={item.url} alt={item.nombre} style={{ maxWidth: '100px', height: 'auto' }} />
-            </td>
+                                                {item.nombre}
+                                            </td>
+                                            <td className="align-middle">
+                                                <img
+                                                    src={item.url}
+                                                    alt={item.nombre}
+                                                    style={{
+                                                        maxWidth: "100px",
+                                                        height: "auto",
+                                                    }}
+                                                />
+                                            </td>
                                             <td className="align-middle">
                                                 {formatCurrency(item.valor)}
                                             </td>

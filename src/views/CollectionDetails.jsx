@@ -77,7 +77,7 @@ const CollectionDetails = () => {
                     <h2 className="text-uppercase">{product.nombre}</h2>
                     <p className="descDetail">{product.descripcion}</p>
                     <p className="descDetail">Publicado por: {product.email}</p>
-                    <p className="valorDetail">{formatCurrency(product.valor)}</p>
+                    <p className="valorDetail fs-2">{formatCurrency(product.valor)}</p>
                     <button className="btn btn-danger" onClick={handleAddToCart}>
                         Agregar a Carro
                     </button>

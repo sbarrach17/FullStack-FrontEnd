@@ -1,16 +1,16 @@
-// import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
-// import { ENDPOINT } from "../config/constants";
+import { validarRut } from "../utils/validarRut";
 import Swal from "sweetalert2";
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const initialForm = {
-    email: "",
-    password: "",
     nombre: "",
     apellido: "",
+    rut: "",
+    email: "",
+    password: "",
 };
 
 const Register = () => {
@@ -18,17 +18,24 @@ const Register = () => {
     const [user, setUser] = useState(initialForm);
     const { registerUser } = useContext(GlobalContext);
 
-    const handleUser = (event) =>
-        setUser({ ...user, [event.target.name]: event.target.value });
+    const handleUser = (event) => {
+        const { name, value } = event.target;
+        if (name === "rut") {
+            setUser({ ...user, [name]: formatoRut(value) });
+        } else {
+            setUser({ ...user, [name]: value });
+        }
+    };
 
     const handleForm = async (event) => {
         event.preventDefault();
 
         if (
-            !user.email.trim() ||
-            !user.password.trim() ||
             !user.nombre.trim() ||
-            !user.apellido.trim()
+            !user.apellido.trim() ||
+            !user.rut.trim() ||
+            !user.email.trim() ||
+            !user.password.trim()
         ) {
             Swal.fire({
                 icon: "error",
@@ -47,6 +54,16 @@ const Register = () => {
             return;
         }
 
+        // Validar RUT
+        if (!validarRut(user.rut)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "El RUT ingresado no es válido.",
+            });
+            return;
+        }
+
         try {
             await registerUser(user);
             Swal.fire({
@@ -57,11 +74,17 @@ const Register = () => {
             navigate("/login");
         } catch (error) {
             console.error("Error during registration:", error);
-            if (error && error.message === "Email already exists") {
+            if (error && error.message === "Email ya existe") {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
                     text: "El correo electrónico ya está en uso. Por favor, elige otro.",
+                });
+            } else if (error && error.message === "Rut ya existe") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "El RUT ya está registrado. Por favor, verifica los datos.",
                 });
             } else {
                 Swal.fire({
@@ -73,31 +96,21 @@ const Register = () => {
         }
     };
 
+    // Función para dar formato al RUT
+    const formatoRut = (rut) => {
+        rut = rut.replace(/[^\dkK.-]/g, ""); // Eliminar caracteres no válidos
+        let cleanedRut = rut.replace(/[^0-9kK]/g, ""); // Quitar todo excepto números y K
+        if (cleanedRut.length > 1) {
+            cleanedRut = cleanedRut.substring(0, cleanedRut.length - 1) + '-' + cleanedRut.substring(cleanedRut.length - 1);
+        }
+        return cleanedRut;
+    };
+
     return (
         <form onSubmit={handleForm} className="col-10 col-sm-6 col-md-3 m-auto mt-5">
             <h1>Registrar nuevo usuario</h1>
             <hr />
-            <div className="form-group mt-1 ">
-                <label>Email</label>
-                <input
-                    value={user.email}
-                    onChange={handleUser}
-                    type="email"
-                    name="email"
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group mt-1 ">
-                <label>Password</label>
-                <input
-                    value={user.password}
-                    onChange={handleUser}
-                    type="password"
-                    name="password"
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group mt-1 ">
+            <div className="form-group mt-1">
                 <label>Nombre</label>
                 <input
                     value={user.nombre}
@@ -117,7 +130,37 @@ const Register = () => {
                     className="form-control"
                 />
             </div>
-            <button type="submit" className="btn btn-danger mt-3">
+            <div className="form-group mt-1">
+                <label>Rut</label>
+                <input
+                    value={user.rut}
+                    onChange={handleUser}
+                    type="text"
+                    name="rut"
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group mt-1">
+                <label>Email</label>
+                <input
+                    value={user.email}
+                    onChange={handleUser}
+                    type="email"
+                    name="email"
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group mt-1">
+                <label>Password</label>
+                <input
+                    value={user.password}
+                    onChange={handleUser}
+                    type="password"
+                    name="password"
+                    className="form-control"
+                />
+            </div>
+            <button type="submit" className="button mt-3">
                 Registrarme
             </button>
         </form>

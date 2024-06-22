@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../contexts/GlobalContext";
 import Swal from 'sweetalert2'
 
 const AddProduct = () => {
     const { addProduct, getDeveloper } = useContext(GlobalContext);
+    const navigate = useNavigate();
     const [product, setProduct] = useState({
         nombre: "",
         descripcion: "",
@@ -32,7 +34,6 @@ const AddProduct = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         if (!getDeveloper || !getDeveloper.email) {
-            // El usuario no está logueado, mostrar mensaje de error
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -40,10 +41,9 @@ const AddProduct = () => {
             });
             return;
         }
-        // Verificar si hay campos vacíos
         const { nombre, descripcion, valor, url } = product;
         if (!nombre || !descripcion || !valor || !url) {
-            // Mostrar mensaje de advertencia por campos vacíos
+
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
@@ -53,7 +53,6 @@ const AddProduct = () => {
         }
         try {
             await addProduct(product);
-            // Limpiar el formulario después de agregar el producto
             setProduct({
                 nombre: "",
                 descripcion: "",
@@ -61,14 +60,15 @@ const AddProduct = () => {
                 url: "",
                 email: getDeveloper.email,
             });
-            // Mostrar mensaje de éxito al agregar el producto
+
             Swal.fire({
                 icon: 'success',
                 title: 'Éxito',
                 text: 'Producto agregado exitosamente',
             });
+            navigate('/publicaciones');
         } catch (error) {
-            // Manejar errores al agregar productos
+
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

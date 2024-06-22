@@ -83,7 +83,7 @@ const Collection = () => {
             <>
                 <div className="row">
                     {currentProducts.map((product) => (
-                        <div key={product.id} className="col-md-4 g-3">
+                        <div key={product.id} className="col-sm-12 col-md-3 col-lg-4 g-3">
                             <Card product={product} />
                         </div>
                     ))}

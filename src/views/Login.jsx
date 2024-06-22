@@ -55,7 +55,7 @@ const Login = () => {
           type='email'
           name='email'
           className='form-control'
-          placeholder='Enter email'
+         
         />
       </div>
       <div className='form-group mt-1 '>
@@ -66,11 +66,11 @@ const Login = () => {
           type='password'
           name='password'
           className='form-control'
-          placeholder='Password'
+       
         />
       </div>
       
-      <button type='submit' className='btn btn-danger mt-3'>Iniciar Sesión</button>
+      <button type='submit' className='button mt-3' >Iniciar Sesión</button>
       
     </form>
   )

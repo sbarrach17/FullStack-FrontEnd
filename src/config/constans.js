@@ -6,10 +6,14 @@ export const ENDPOINT = {
   editUser: `${URLBASE}/usuarios`,
   product: `${URLBASE}/productos`,
   newProduct: `${URLBASE}/productos`,
+  editProduct: `${URLBASE}/productos`,
   getProductEmail:`${URLBASE}/productos`,
   deleteProduct:`${URLBASE}/productos`,
   getFavorites:`${URLBASE}/favoritos`,
   addFavorites:`${URLBASE}/favoritos`,
   deleteFavorites:`${URLBASE}/favoritos`,
-  insertCart:`${URLBASE}/carros`,
+  insertCart:`${URLBASE}/carro`,
 }
+
+
+

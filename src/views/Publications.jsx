@@ -18,7 +18,7 @@ const Publications = () => {
                 {!getDeveloper ? (
                     <h2>Inicia sesión para ver tus publicaciones.</h2>
                 ) : (
-                    <p>No tienes publicaciones.</p>
+                    <h3 className="mt-3">NO TIENES PUBLICACIONES</h3>
                 )}
             </div>
         );
