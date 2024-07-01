@@ -179,7 +179,7 @@
     width: 90%;
     height: 700px;
     object-position: center center;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 40px;
     padding: 1rem;
 }
