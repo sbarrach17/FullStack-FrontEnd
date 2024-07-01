@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
-import { ENDPOINT } from "../config/constans";
 import useDeveloper from "../hooks/useDeveloper";
 import Context from "./Context";
 
@@ -14,7 +13,6 @@ export const GlobalProvider = ({ children }) => {
     const [addProductError, setAddProductError] = useState(null);
     const [addCarError, setAddCarError] = useState(null);
     const [cartItems, setCartItems] = useState([]);
-    
 
     const addToCart = (product) => {
         setCartItems([...cartItems, product]);
@@ -91,22 +89,23 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
-   const editProduct = async (productId, productData) => {
-    try {
-        const token = window.sessionStorage.getItem("token");
-        if (token) {
-            await axios.put(`${ENDPOINT.editProduct}/${productId}`, productData, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+    const editProduct = async (productId, productData) => {
+        try {
+            const token = window.sessionStorage.getItem("token");
+            if (token) {
+                await axios.put(`${ENDPOINT.editProduct}/${productId}`, productData, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-            setAddProductError(null);
-            getProductData();
+                setAddProductError(null);
+                getProductData();
+            }
+        } catch (error) {
+            setAddProductError(error);
+            console.error("Error al editar producto:", error);
         }
-    } catch (error) {
-        setAddProductError(error);
-        console.error("Error al editar producto:", error);
-    }
-};
+    };
+
     const getProductByEmail = async (email) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -127,8 +126,6 @@ export const GlobalProvider = ({ children }) => {
             throw error;
         }
     };
-
-
 
     const deleteProductById = async (productId) => {
         try {
@@ -184,26 +181,7 @@ export const GlobalProvider = ({ children }) => {
             throw error;
         }
     };
-    // Función para obtener favoritos por email
-    // const getFavorites = async (email) => {
-    //     try {
-    //         const token = window.sessionStorage.getItem("token");
-    //         if (token) {
-    //             const response = await axios.get(`${ENDPOINT.getFavorites}`,               
-    //                 {
-    //                     headers: { Authorization: `Bearer ${token}` },
-    //                     params: { email: getDeveloper.email  }
-    //                 }
-    //             );
-    //             return response.data;
-    //         } else {
-    //             throw new Error("Token no encontrado");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error al obtener favoritos:", error);
-    //         throw error;
-    //     }
-    // };
+
     const insertarAlCarro = async (carroItem) => {
         try {
             const token = window.sessionStorage.getItem("token");
@@ -282,7 +260,6 @@ export const GlobalProvider = ({ children }) => {
                 getProductByEmail,
                 deleteProductById,
                 addFavorite,
-                // getFavorites,
                 deleteFavoriteById,
                 addCarError,
                 addToCart,
@@ -308,7 +285,6 @@ export const GlobalProvider = ({ children }) => {
                     getProductByEmail,
                     deleteProductById,
                     addFavorite,
-                    // getFavorites,
                     deleteFavoriteById,
                     addCarError,
                     addToCart,
@@ -325,3 +301,5 @@ export const GlobalProvider = ({ children }) => {
         </GlobalContext.Provider>
     );
 };
+
+export default GlobalProvider;
