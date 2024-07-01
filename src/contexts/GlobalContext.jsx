@@ -27,7 +27,7 @@ export const GlobalProvider = ({ children }) => {
         const token = window.sessionStorage.getItem("token");
         if (token) {
             axios
-            .get("https://backend-ntz1.onrender.com/usuarios", {
+                .get(ENDPOINT.users, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 .then(({ data: [user] }) => setDeveloper({ ...user }))
@@ -46,7 +46,7 @@ export const GlobalProvider = ({ children }) => {
 
     const getProductData = async () => {
         try {
-            const response = await axios.get("https://backend-ntz1.onrender.com/productos");
+            const response = await axios.get(ENDPOINT.product);
             setProducts(response.data);
         } catch (error) {
             console.error("Error al obtener datos de productos:", error);
@@ -218,7 +218,7 @@ export const GlobalProvider = ({ children }) => {
 
     const login = async (user, navigate) => {
         try {
-            const { data } = await axios.post("https://backend-ntz1.onrender.com/usuarios", user);
+            const { data } = await axios.post(ENDPOINT.login, user);
             window.sessionStorage.setItem("token", data.token);
             setDeveloper({});
             navigate("/collection");
@@ -237,7 +237,7 @@ export const GlobalProvider = ({ children }) => {
 
     const registerUser = async (userData) => {
         try {
-            const { data } = await axios.post("https://backend-ntz1.onrender.com/usuarios", userData);
+            const { data } = await axios.post(ENDPOINT.users, userData);
             setDeveloper(data);
             return data;
         } catch (error) {
