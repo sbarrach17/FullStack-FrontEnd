@@ -23,6 +23,7 @@ h2{
     --accent-color: #ffd426;
     position: relative;
     width: 240px;
+    height: 410px;
     background-color: rgba(17, 24, 39, 1);
     /* background: rgba(235, 234, 234, 0.918); */
     border-radius: 1rem;

@@ -41,6 +41,7 @@ const CardFavorites = ({ favorite, deleteFavorite,  }) => {
             <div className="sizes">Vendedor {favorite.vendedor_email}</div>
             <p>{favorite.vendedor_email}</p>
           </div> */}
+          <p className='text-white'>TALLA {favorite.producto_talla}</p>
         </div>
 
         <div className="button-container">

@@ -46,6 +46,7 @@ const CardPublications = ({ product, deleteProduct }) => {
                         <div className="content">
                             <div className="brand">{product.marca}</div>
                             <div className="product-name">{product.modelo}</div>
+                            <div className="product-name mb-1">TALLA {product.talla}</div>
                         </div>
                         <div className="button-container">
                             <Link to={`/editarProducto/${product.id}`} className="buy-button button">
