@@ -1,4 +1,4 @@
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Card = ({ product }) => {
   const formatCurrency = (amount) => {
@@ -31,9 +31,9 @@ const Card = ({ product }) => {
         </div>
        
         <div className="button-container">
-          <a href={`/collection/${product.id}`} className="buy-button button">
+          <Link to={`/collection/${product.id}`} className="buy-button button">
             Más información
-          </a>
+          </Link>
         </div>
       </div>
     </>
