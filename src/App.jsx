@@ -13,7 +13,6 @@ import CollectionDetails from "./views/CollectionDetails";
 import Cart from "./views/Cart";
 import Favorites from "./views/Favorites";
 import EditProduct from "./components/EditProduct";
-import { use } from "../../server/routes/user.Routes";
 import { useEffect } from "react";
 
 const App = () => {
