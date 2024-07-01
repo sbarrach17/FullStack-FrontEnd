@@ -1,4 +1,5 @@
-export const URLBASE = 'http://localhost:3000'
+// export const URLBASE = 'http://localhost:3000'
+export const URLBASE = 'https://fullstack-backend-dult.onrender.com'
 
 export const ENDPOINT = {
   login: `${URLBASE}/login`,
