@@ -27,7 +27,7 @@ const Publications = () => {
 
     return (
         <div className="container-fluid p-5">
-        <h2>Mis Publicaciones {getDeveloper.email}</h2>
+        <h2 className="text-dark">Mis Publicaciones {getDeveloper.email}</h2>
         <div className="row row-cols-auto d-flex justify-content-center ">
             {userProducts.map((product) => (
                 <div key={product.id} className="col d-flex align-items-center flex-column" >

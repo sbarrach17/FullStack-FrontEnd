@@ -89,6 +89,7 @@ const CollectionDetails = () => {
                     <p className="textContent">{product.descripcion}</p>
                     <div className="textTalla">
                         <p className="text-start text-uppercase">TALLA {product.talla}</p>
+                        <p className="text-start text-uppercase">VALOR { formatCurrency (product.valor)}</p>
                     </div>
                     {/* BOTON DE VENDEDOR */}
                     <div className="btnContact">
