@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import Card from "../components/Card";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import "../css/Card.css";
 
 const Collection = () => {
     const { products } = useContext(GlobalContext);
@@ -9,13 +10,13 @@ const Collection = () => {
     const [sortedProducts, setSortedProducts] = useState([]);
     const [sortOption, setSortOption] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const maxProductsPerPage = 10;
+    const maxProductsPerPage = 15;
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
             setSortedProducts([...products]);
-        }, 1000);
+        }, 2500);
 
         return () => clearTimeout(timer);
     }, [products]);
@@ -27,9 +28,9 @@ const Collection = () => {
         } else if (sortOption === "priceDesc") {
             sortedArray.sort((a, b) => b.valor - a.valor);
         } else if (sortOption === "alphaAsc") {
-            sortedArray.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            sortedArray.sort((a, b) => a.marca.localeCompare(b.marca));
         } else if (sortOption === "alphaDesc") {
-            sortedArray.sort((a, b) => b.nombre.localeCompare(a.nombre));
+            sortedArray.sort((a, b) => b.marca.localeCompare(a.marca));
         }
         setSortedProducts(sortedArray);
         setCurrentPage(1); // Reset to first page when sorting option changes
@@ -53,84 +54,86 @@ const Collection = () => {
     const totalPages = Math.ceil(sortedProducts.length / maxProductsPerPage);
 
     return (
-        <div className="container">
-        <div className="selectCollection mb-3">
-         
-            <div className="form-group">
-                <label htmlFor="sortSelect" className="form-label">Ordenar por:</label>
-                <select id="sortSelect" className="form-select" value={sortOption} onChange={handleSortChange}>
-                    <option value="">Seleccione...</option>
-                    <option value="priceAsc">Precio: Menor a Mayor</option>
-                    <option value="priceDesc">Precio: Mayor a Menor</option>
-                    <option value="alphaAsc">Nombre: A-Z</option>
-                    <option value="alphaDesc">Nombre: Z-A</option>
-                </select>
-            </div>
-        </div>
-        {loading ? (
-            <div id="loadingScreen">
-                <img
-                    src="./img/banner.png"
-                    alt="Imagen de Carga"
-                    className="loading-image"
-                />
-                <div className="loading-message">
-                    {/* Mensaje opcional al cargar catalogo */}
+        // <div className="d-flex flex-column align-items-center">
+        <div>
+            {loading ? (
+               <div className="spinnerContainer">
+               <div className="spinner"></div>
+               <div className="loader">
+                 <p>Cargando</p>
+                 <div className="words">
+                   <span className="word">...</span>
+                   <span className="word">Imagenes</span>             
+                   <span className="word">Post</span>
+                 </div>
+               </div>
+             </div>
+            ) : (
+                <>
+                <div className="selCollection mt-3">
+                    <label >Ordenar por:</label>
+                    <select name="" id="" className="boxSelect" value={sortOption} onChange={handleSortChange}>
+                        <option  value="" disabled></option>
+                        <option  value="priceAsc">Precio Menor a Mayor</option>
+                        <option value="priceDesc">Precio Mayor a Menor</option>
+                        <option value="alphaAsc">Nombre A-Z</option>
+                        <option value="alphaDesc">Nombre Z-A</option>
+                    </select>
                 </div>
-                <div className="custom-spinner"></div>
-            </div>
-        ) : (
-            <>
-                <div className="row">
-                    {currentProducts.map((product) => (
-                        <div key={product.id} className="col-sm-12 col-md-3 col-lg-4 g-3">
-                            <Card product={product} />
-                        </div>
-                    ))}
-                </div>
-                <div className="pagination mt-4 d-flex justify-content-center">
-                    <button
-                        className="btn btn-outline-primary mb-4 "
-                        onClick={() => handlePageChange(1)}
-                        disabled={currentPage === 1}
-                    >
-                        Primera
-                    </button>
-                    <button
-                        className="btn btn-outline-primary mb-4 "
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        Anterior
-                    </button>
-                    {[...Array(totalPages).keys()].map((number) => (
+
+                    <div className="container-fluid p-5">
+                    <div className="row row-cols-auto d-flex justify-content-center ">
+                        {currentProducts.map((product) => (
+                            <div key={product.id} className="col d-flex align-items-center flex-column">
+                                <Card product={product} />
+                            </div>
+                        ))}
+                    </div>
+                    </div>
+              
+                    <div className="pagination mt-4 d-flex justify-content-center">
                         <button
-                            key={number + 1}
-                            className={`btn btn-outline-primary mb-4  ${currentPage === number + 1 ? 'active' : ''}`}
-                            onClick={() => handlePageChange(number + 1)}
+                            className="btn btnPagination mb-4"
+                            onClick={() => handlePageChange(1)}
+                            disabled={currentPage === 1}
                         >
-                            {number + 1}
+                            &#60;&#60;
                         </button>
-                    ))}
-                    <button
-                        className="btn btn-outline-primary mb-4 "
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        Siguiente
-                    </button>
-                    <button
-                        className="btn btn-outline-primary mb-4 "
-                        onClick={() => handlePageChange(totalPages)}
-                        disabled={currentPage === totalPages}
-                    >
-                        Última
-                    </button>
-                </div>
-            </>
-        )}
-    </div>
-);
+                        <button
+                            className="btn btnPagination mb-4"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            &#60;
+                        </button>
+                        {[...Array(totalPages).keys()].map((number) => (
+                            <button
+                                key={number + 1}
+                                className={`btn btnPagination mb-4 ${currentPage === number + 1 ? 'active' : ''}`}
+                                onClick={() => handlePageChange(number + 1)}
+                            >
+                                {number + 1}
+                            </button>
+                        ))}
+                        <button
+                            className="btn btnPagination mb-4"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            &#62;
+                        </button>
+                        <button
+                            className="btn btnPagination mb-4"
+                            onClick={() => handlePageChange(totalPages)}
+                            disabled={currentPage === totalPages}
+                        >
+                            &#62;&#62;
+                        </button>
+                    </div>
+                </>
+            )}
+        </div>
+    );
 };
 
 export default Collection;

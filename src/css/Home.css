@@ -1,0 +1,77 @@
+.Home {
+    background: #313131; 
+    background: rgba(0, 0, 0, 0.9); 
+
+    background-repeat: no-repeat; 
+    background-size: cover; 
+
+    height: 90vh;
+    display: flex; 
+
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.image-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.image-box {
+    flex: 1; 
+    /* margin: 10px;  */
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    object-position: center center;
+}
+
+
+/* Media Queries para hacer el diseño responsivo */
+@media (max-width: 1024px) {
+    .image-container {
+        flex-direction: column;
+        height: 100vh;
+        box-sizing: border-box;
+        
+    }
+
+    .image-box:not(.middle) {
+        display: none; /* Oculta las imágenes que no son del medio */
+        object-fit: cover;
+        object-position: center center;
+    }
+
+    .image-box.middle {
+        height: 100vh; /* Asegura que la imagen del medio ocupe toda la altura de la pantalla */
+        margin: 0; /* Remueve el margen para la imagen del medio */
+        object-fit: cover;
+        object-position: center center;
+    }
+}
+
+@media (max-width: 768px) {
+    .image-box:not(.middle) {
+        display: none; /* Oculta las imágenes que no son del medio */
+    }
+
+    .image-box.middle {
+        height: 100vh; /* Asegura que la imagen del medio ocupe toda la altura de la pantalla */
+        margin: 0; /* Remueve el margen para la imagen del medio */
+    }
+}
+
+@media (max-width: 480px) {
+    .image-box:not(.middle) {
+        display: none; 
+    }
+
+    .image-box.middle {
+        height: 100vh; 
+        margin: 0; 
+    }
+}

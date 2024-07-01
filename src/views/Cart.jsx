@@ -3,6 +3,7 @@ import { GlobalContext } from "../contexts/GlobalContext";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { validarRut } from "../utils/validarRut";
+import "../css/Cart.css";
 
 const Cart = () => {
     const { cartItems, removeItemFromCart, insertarAlCarro } =
@@ -22,8 +23,22 @@ const Cart = () => {
         domicilio: "",
         departamento: "",
         metodoPago: "",
-        producto_id: "",
+        titular: "",
+        ntarjeta: "",
+        expiracion: "",
+        cvv: "",
     });
+    const formatExpiry = (e) => {
+        let value = e.target.value.replace(/\D/g, ""); // Eliminar caracteres no numéricos
+        if (value.length > 5) {
+            value = value.slice(0, 4);
+        }
+        if (value.length > 3) {
+            e.target.value = value.slice(0, 2) + "/" + value.slice(2);
+        } else {
+            e.target.value = value;
+        }
+    };
 
     useEffect(() => {
         let total = 0;
@@ -53,6 +68,7 @@ const Cart = () => {
                 [name]: value,
             });
         }
+        
     };
 
     const formatoRut = (rut) => {
@@ -79,6 +95,10 @@ const Cart = () => {
             direccion,
             domicilio,
             metodoPago,
+            titular,
+            ntarjeta,
+            expiracion,
+            cvv,
         } = formData;
 
         if (!nombre) {
@@ -119,6 +139,22 @@ const Cart = () => {
         }
         if (!metodoPago) {
             showError("Método de Pago");
+            return false;
+        }
+        if (!titular) {
+            showError("Nombre Titular");
+            return false;
+        }
+        if (!ntarjeta) {
+            showError("Numero de Tarjeta");
+            return false;
+        }
+        if (!expiracion) {
+            showError("Fecha expiracion");
+            return false;
+        }
+        if (!cvv) {
+            showError("CVV");
             return false;
         }
         if (!validarRut(rut)) {
@@ -178,6 +214,10 @@ const Cart = () => {
                     domicilio: "",
                     departamento: "",
                     metodoPago: "",
+                    titular: "",
+                    ntarjeta: "",
+                    expiracion: "",
+                    cvv: "",
                 });
                 setTotalValue(0);
                 removeItemFromCart(productId);
@@ -231,8 +271,8 @@ const Cart = () => {
     }, [currentStep]);
 
     return (
-        <div className="mt-4">
-            <div id="smartwizard" className="container-fluid">
+        <div>
+            <div id="smartwizard">
                 <ul className="nav">
                     <li className="nav-item">
                         <a className="nav-link" href="#step-1">
@@ -252,12 +292,12 @@ const Cart = () => {
                             PAGO
                         </a>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <a className="nav-link" href="#step-4">
-                            <span className="num">3</span>
+                            <span className="num">4</span>
                             RESUMEN
                         </a>
-                    </li>
+                    </li> */}
                 </ul>
                 <div className="tab-content">
                     {/* STEP 1: CONTACTO */}
@@ -270,16 +310,16 @@ const Cart = () => {
                         <div className="text-center">
                             <h3>Información de contacto</h3>
                         </div>
-                        <div className="row d-flex justify-content-center">
+                        <div className="row row-cols-auto d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-5">
-                                <div className="form-group">
+                                <div className="inputCart form-group">
                                     <label>
                                         Nombre{" "}
                                         <span style={{ color: "red" }}>*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        className="inputCart form-control"
+                                        className=" form-control"
                                         name="nombre"
                                         value={formData.nombre}
                                         onChange={handleInputChange}
@@ -287,14 +327,14 @@ const Cart = () => {
                                 </div>
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-5">
-                                <div className="form-group">
+                                <div className="inputCart form-group">
                                     <label>
                                         Apellido{" "}
                                         <span style={{ color: "red" }}>*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        className="inputCart form-control"
+                                        className=" form-control"
                                         name="apellido"
                                         value={formData.apellido}
                                         onChange={handleInputChange}
@@ -302,16 +342,16 @@ const Cart = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row d-flex justify-content-center">
+                        <div className="row row-cols-auto d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-5">
-                                <div className="form-group">
+                                <div className="inputCart form-group">
                                     <label>
                                         Rut{" "}
                                         <span style={{ color: "red" }}>*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        className="inputCart form-control"
+                                        className="form-control"
                                         name="rut"
                                         value={formData.rut}
                                         onChange={handleInputChange}
@@ -319,14 +359,14 @@ const Cart = () => {
                                 </div>
                             </div>
                             <div className="col-sm-12 col-md-6 col-lg-5">
-                                <div className="form-group">
+                                <div className="inputCart form-group">
                                     <label>
                                         Email{" "}
                                         <span style={{ color: "red" }}>*</span>
                                     </label>
                                     <input
                                         type="email"
-                                        className="inputCart form-control"
+                                        className="form-control"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
@@ -334,25 +374,27 @@ const Cart = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row d-flex justify-content-center">
+                        <div className="row row-cols-auto d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-10">
-                                <div className="form-group">
+                                <div className="inputCart form-group">
                                     <label>
                                         Número de Contacto{" "}
                                         <span style={{ color: "red" }}>*</span>
                                     </label>
                                     <input
-                                        type="text"
-                                        className="inputCart form-control"
+                                        type="number"
+                                        maxLength="9"
+                                        className="form-control"
+                                        placeholder="+56"                               
                                         name="numero"
                                         value={formData.numero}
                                         onChange={handleInputChange}
                                     />
+                                    <span>incluir +56</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {/* STEP 2: DESPACHO */}
                     <div
                         id="step-2"
@@ -363,7 +405,7 @@ const Cart = () => {
                         <div className="col-12">
                             <h3>Información de despacho</h3>
                         </div>
-                        <div className="row d-flex justify-content-center">
+                        <div className="row row-cols-auto d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-5">
                                 <div className="inputCart form-group">
                                     <label>
@@ -440,7 +482,7 @@ const Cart = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row d-flex justify-content-center">
+                        <div className="row row-cols-auto d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-5">
                                 <div className="inputCart form-group">
                                     <label>
@@ -472,7 +514,7 @@ const Cart = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row d-flex justify-content-center">
+                        <div className="row row-cols-auto d-flex justify-content-center">
                             <div className="col-sm-12 col-md-6 col-lg-10">
                                 <div className="inputCart form-group">
                                     <label>
@@ -492,165 +534,150 @@ const Cart = () => {
                             </div>
                         </div>
                     </div>
-                    {/* STEP 3: PAGO */}
+           
+                    {/* STEP 3 Resumen */}
                     <div
                         id="step-3"
                         className="tab-pane"
                         role="tabpanel"
                         aria-labelledby="step-3"
                     >
-                        <div className="col-md-12">
-                            <h4>Método de Pago</h4>
-                        </div>
-                        <div className="row d-flex justify-content-center">
-                            <div className="col-sm-12 col-md-6 col-lg-5">
-                                <div className="form-group">
-                                    <label>
-                                        Seleccione el método de pago{" "}
-                                        <span style={{ color: "red" }}>*</span>
-                                    </label>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="metodoPago"
-                                            id="tarjetaCredito"
-                                            value="Tarjeta de Crédito"
-                                            checked={
-                                                formData.metodoPago ===
-                                                "Tarjeta de Crédito"
-                                            }
-                                            onChange={handleInputChange}
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="tarjetaCredito"
-                                        >
-                                            Tarjeta de Crédito
+                      
+                        <section>
+        <div className="row">
+            <div className="col-sm-12 col-md-5 col-lg-6 mb-4">
+                <div className="cars mb-4">
+                    <div className="card-body">
+                        <form>
+                            <div className="row mb-4"></div>
+                            <h5 className="mb-4">METODO DE PAGO</h5>
+                            <div className="form-check col-sm-12 col-md-5 mb-4 align-items-center">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="metodoPago"
+                                    id="checkoutForm3"
+                                   value="Tajeta Credito"
+                                   onChange={handleInputChange}
+                                    checked={
+                                        formData.metodoPago ===
+                                        "Tarjeta de Débito"
+                                    }
+                                />
+                                <label className="form-check-labels" htmlFor="checkoutForm3">
+                                   Tarjeta Credito
+                                </label>
+                                <div>
+                                <img className="iconPayment" src="https://logowik.com/content/uploads/images/visa-payment-card1873.jpg"  alt="" />
+                                <img className="iconPayment" src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg"  alt="" />
+                                
+                                </div>
+                            </div>
+                            <div className="form-check col-sm-12 col-md-5 mb-4">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="metodoPago"
+                                    id="checkoutForm4"
+                                    value="Tarjeta Débito"
+                                    onChange={handleInputChange}
+                                    checked={
+                                        formData.metodoPago ===
+                                        "Tarjeta de Débito"
+                                    }
+                                />
+                                <label className="form-check-labels" htmlFor="checkoutForm4">
+                                    Tarjeta Débito
+                                </label>
+                                <div>
+                                <img className="iconPayment" src="https://logowik.com/content/uploads/images/visa-payment-card1873.jpg"  alt="" />
+                                <img className="iconPayment" src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg"  alt="" />
+                                
+                                </div>
+                            </div>
+                            <div className="row mb-4">
+                                <div className="col">
+                                    <div data-mdb-input-init className="form-outline">
+                                        <input type="text"  className="form-control" name="titular"   value={formData.titular} onChange={handleInputChange}  />
+                                        <label className="form-label">
+                                            Nombre Titular
                                         </label>
                                     </div>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="metodoPago"
-                                            id="tarjetaDebito"
-                                            value="Tarjeta de Débito"
-                                            checked={
-                                                formData.metodoPago ===
-                                                "Tarjeta de Débito"
-                                            }
-                                            onChange={handleInputChange}
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="tarjetaDebito"
-                                        >
-                                            Tarjeta de Débito
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="metodoPago"
-                                            id="paypal"
-                                            value="PayPal"
-                                            checked={
-                                                formData.metodoPago === "PayPal"
-                                            }
-                                            onChange={handleInputChange}
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="paypal"
-                                        >
-                                            PayPal
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="metodoPago"
-                                            id="transferenciaBancaria"
-                                            value="Transferencia Bancaria"
-                                            checked={
-                                                formData.metodoPago ===
-                                                "Transferencia Bancaria"
-                                            }
-                                            onChange={handleInputChange}
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="transferenciaBancaria"
-                                        >
-                                            Transferencia Bancaria
+                                </div>
+                                <div className="col">
+                                    <div data-mdb-input-init className="form-outline">
+                                        <input type="text" className="form-control" name="ntarjeta"   value={formData.ntarjeta} onChange={handleInputChange} />
+                                        <label className="form-label" >
+                                           Número Tarjeta
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div className="row mb-4">
+                                <div className="col-3">
+                                    <div data-mdb-input-init className="form-outline">
+                                        <input type="text" i className="form-control" name="expiracion"   value={formData.expiracion} onChange={handleInputChange} />
+                                        <label className="form-label" >
+                                           Fecha Expiración
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="col-3">
+                                    <div data-mdb-input-init className="form-outline">
+                                        <input type="password"  className="form-control" maxLength="3" name="cvv"   value={formData.cvv} onChange={handleInputChange}/>
+                                        <label className="form-label" >
+                                            CVV
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                      
+                        </form>
                     </div>
-
-                    {/* STEP 4 Resumen */}
-                    <div
-                        id="step-4"
-                        className="tab-pane"
-                        role="tabpanel"
-                        aria-labelledby="step-3"
-                    >
-                        <div className="col-md-12">
-                            <h4>Resumen del Carrito</h4>
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Imagen</th>
-                                        <th>Valor</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {cartItems.map((item) => (
-                                        <tr key={item.id}>
-                                            <td className="align-middle">
-                                                {item.nombre}
-                                            </td>
-                                            <td className="align-middle">
-                                                <img
-                                                    src={item.url}
-                                                    alt={item.nombre}
-                                                    style={{
-                                                        maxWidth: "100px",
-                                                        height: "auto",
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className="align-middle">
-                                                {formatCurrency(item.valor)}
-                                            </td>
-                                            <td className="align-middle">
-                                                <button
-                                                    className="btn btn-danger"
-                                                    onClick={() =>
-                                                        removeItemFromCart(
-                                                            item.id
-                                                        )
-                                                    }
-                                                >
-                                                    Eliminar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <div className="text-end">
-                                <h4>
-                                    Total a Pagar: {formatCurrency(totalValue)}
-                                </h4>
-                                <button
+                </div>
+            </div>
+            <div className="col-md-4 mb-4 bg-white">
+                <div className="cars mb-4">
+                    <div className="card-header py-3">
+                        <h5 className="mb-0">Detalles Pedido</h5>
+                    </div>
+                    <div className="card-body">
+                        {cartItems.map((item) => (
+                            <div key={item.id}>
+                                <div className="d-flex justify-content-center">
+                                    <img
+                                        className=""
+                                        src={item.url}
+                                        alt={item.marca}
+                                        style={{ maxWidth: "100px", height: "auto" }}
+                                    />
+                                </div>
+                                <ul className="list-group list-group-flush bgf">
+                                    <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                        {item.marca}
+                                        <span>{item.modelo}</span>
+                                    </li>
+                                    <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                        Valor
+                                        <span>{formatCurrency(item.valor)}</span>
+                                    </li>
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        Despacho
+                                        <span>Gratis</span>
+                                    </li>
+                                    <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                        <div>
+                                            <strong>Monto Total</strong>
+                                            <strong>
+                                                <p className="mb-0">(IVA Incluido)</p>
+                                            </strong>
+                                        </div>
+                                        <span>
+                                            <strong>{formatCurrency(item.valor)}</strong>
+                                        </span>
+                                    </li>
+                                </ul>
+                                  <button
                                     className="btn btn-success"
                                     onClick={() =>
                                         handleInsertItem(cartItems[0].id)
@@ -659,8 +686,14 @@ const Cart = () => {
                                     Confirmar Compra
                                 </button>
                             </div>
-                        </div>
+                        ))}
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+                    </div>{" "} 
+                   
                 </div>
 
                 <div className="progress">

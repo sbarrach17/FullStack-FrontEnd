@@ -1,0 +1,52 @@
+:root {
+    --sw-border-color:  none;
+    --sw-toolbar-btn-color:  #ffffff;
+    --sw-toolbar-btn-background-color:  rgb(97, 39, 190);
+    --sw-anchor-default-primary-color:  #f8f9fa;
+    --sw-anchor-default-secondary-color:  #b0b0b1;
+    --sw-anchor-active-primary-color:  rgb(97, 39, 190);
+    --sw-anchor-active-secondary-color:  #ffffff;
+    --sw-anchor-done-primary-color:  rgba(97, 39, 190, 0.557);
+    --sw-anchor-done-secondary-color:  #fefefe;
+    --sw-anchor-disabled-primary-color:  #f8f9fa;
+    --sw-anchor-disabled-secondary-color:  #dbe0e5;
+    --sw-anchor-error-primary-color:  #dc3545;
+    --sw-anchor-error-secondary-color:  #ffffff;
+    --sw-anchor-warning-primary-color:  #ffc107;
+    --sw-anchor-warning-secondary-color:  #ffffff;
+    --sw-progress-color:  rgb(97, 39, 190);
+    --sw-progress-background-color:  #f8f9fa;
+    --sw-loader-color:  rgb(97, 39, 190);
+    --sw-loader-background-color:  #f8f9fa;
+    /* --sw-loader-backdrop-filter: blur(10px); */
+    --sw-loader-background-wrapper-color:  rgba(255, 255, 255, 0.7);
+  }
+  #smartwizard{
+    background-color: rgb(251, 251, 251);
+  }
+
+label{
+  font-weight: 700;
+}
+
+
+
+
+img{
+  width: 50%;
+  height: 50%;
+}
+
+.iconPayment{
+  width: 50px;
+  height: 50px;
+  align-items: center;
+}
+.form-check{
+  display: flex;
+  align-items: center;
+   justify-content: center;
+   gap: 1rem;
+}
+
+  

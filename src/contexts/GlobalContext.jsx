@@ -216,6 +216,7 @@ export const GlobalProvider = ({ children }) => {
                     }
                 );
                 console.log(response.data);
+                getProductData(); 
             }
         } catch (error) {
             console.error(

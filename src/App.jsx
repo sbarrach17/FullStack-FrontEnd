@@ -14,10 +14,12 @@ import Cart from "./views/Cart";
 import Favorites from "./views/Favorites";
 import EditProduct from "./components/EditProduct";
 
+
 const App = () => {
   return (
-    <section>
+    <>
       <Navigation />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/registrarse" element={<Registro />} />
@@ -27,12 +29,13 @@ const App = () => {
         <Route path="/collection/:id" element={<CollectionDetails />} />
         <Route path="/editarPerfil" element={<EditProfile />} />
         <Route path="/agregarProducto" element={<AddProduct />} />
-        <Route path="/editarProducto/:productId"  element={<EditProduct />} />
+        <Route path="/editarProducto/:productId" element={<EditProduct />} />
         <Route path="/publicaciones" element={<Publications />} />
         <Route path="/carro" element={<Cart />} />
         <Route path="/favoritos" element={<Favorites />} />
+
       </Routes>
-    </section>
+    </>
   );
 };
 

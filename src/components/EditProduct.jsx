@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { GlobalContext } from '../contexts/GlobalContext';
+import '../css/EditProduct.css'
 
 const EditProduct = () => {
     const { productId } = useParams();
@@ -24,7 +25,7 @@ const EditProduct = () => {
     };
 
     const validateForm = () => {
-        if (!productData.nombre || !productData.descripcion || !productData.valor || !productData.url) {
+        if (!productData.marca || !productData.modelo || !productData.talla || !productData.valor || !productData.url || !productData.descripcion) {
             Swal.fire({
                 title: 'Error',
                 text: 'Todos los campos son obligatorios.',
@@ -56,62 +57,51 @@ const EditProduct = () => {
     if (!productData) return <div>Cargando Publicación...</div>;
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="col-10 col-sm-6 col-md-3 m-auto mt-5"
-        >
-            <h1>Editar Producto</h1>
-            <hr />
-            <div className="form-group mt-1">
-                <label>Nombre </label>
-                <input
-                    value={productData.nombre}
-                    onChange={handleChange}
-                    type="text"
-                    name="nombre"
-                    className="form-control"
-                    placeholder="Nombre del producto"
-                />
-            </div>
-            <div className="form-group mt-1">
-                <label>Descripción </label>
-                <input
-                    value={productData.descripcion}
-                    onChange={handleChange}
-                    type="text"
-                    name="descripcion"
-                    className="form-control"
-                    placeholder="Descripción del producto"
-                />
-            </div>
-            <div className="form-group mt-1">
-                <label>Valor </label>
-                <input
-                    value={productData.valor}
-                    onChange={handleChange}
-                    type="number"
-                    name="valor"
-                    className="form-control"
-                    placeholder="Valor del producto"
-                />
-                <small>{new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(productData.valor)}</small>
-            </div>
-            <div className="form-group mt-1">
-                <label>Imagen </label>
-                <input
-                    value={productData.url}
-                    onChange={handleChange}
-                    type="text"
-                    name="url"
-                    className="form-control"
-                    placeholder="URL de la imagen del producto"
-                />
-            </div>
-         
-            <button type="submit" className="btn btn-primary mt-3">
-               Guardar Cambios
-            </button>
-        </form>
+        <div className="containter-register">
+        <div className="form-container">
+	<p className="title">EDITAR PRODUCTO</p>
+	<form className="form" onSubmit={handleSubmit}>
+		<div className="input-group">
+			<label >Marca</label>
+			<input type="text" name="marca" onChange={handleChange}  value={productData.marca}/>
+		</div>
+		<div className="input-group">
+			<label >Modelo</label>
+			<input type="text" name="modelo" onChange={handleChange}  value={productData.modelo} />
+		</div>
+		<div className="input-group">
+			<label >Talla</label>
+			<input type="text" name="talla" onChange={handleChange}  value={productData.talla}/>
+		</div>
+			<div className="input-group">
+			<label >Valor</label>
+			<input type="number" name="valor" onChange={handleChange}  value={productData.valor}/>
+		</div>
+        <div className="input-group">
+			<label >Imagen</label>
+			<input type="text" name="url" onChange={handleChange}  value={productData.url}/>
+		</div>
+        <div className="input-group">
+            <label>Descripcion</label>
+            <textarea type="text" name="descripcion" onChange={handleChange} value={productData.descripcion} />
+          </div>
+        <button type="submit" className="sign mt-3">
+          EDITAR
+        </button>
+	</form>
+	<div className="social-message">
+		<div className="line"></div>
+		<p className="message"></p>
+		<div className="line"></div>
+	</div>
+	<div className="social-icons">
+	
+	
+	
+	</div>
+	
+</div>
+    </div>
     );
 };
 

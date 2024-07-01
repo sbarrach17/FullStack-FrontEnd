@@ -1,0 +1,169 @@
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.978);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+.navbar {
+  display: flex;
+  padding: 10px 20px;
+  background-color: rgba(17, 24, 39, 1);
+}
+
+.navbar .logo{
+  font-weight: bold;
+  font-size: 28px;
+  font-style: italic;
+  color: rgb(255, 255, 255);
+}
+.navbar .opciones {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .opciones span{
+  cursor: pointer;
+}
+
+.navbar .register-btn {
+  background: #3c6e71;
+  color: white;
+}
+
+.navbar .login-btn {
+  background: #d9d9d9;
+}
+.logoNav{
+  width: 100px;
+  height: 100px;
+}
+
+ .Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(255, 65, 65);
+}
+.sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sign svg {
+  width: 17px;
+}
+.sign svg path {
+  fill: white;
+}
+
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+.Btn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+.Btn:active {
+  transform: translate(2px, 2px);
+}
+
+
+.value {
+  background-color: transparent;
+  align-items: center;
+  border: none;
+text-decoration: none;
+  color: white;
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.value:hover{
+  color: rgb(97, 39, 190);
+  color: #ffd426;
+}
+
+.BtnRegister {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(141, 142, 143);
+}
+
+.BtnRegister:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+.BtnRegister:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+.BtnRegister:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+.BtnRegister:active {
+  transform: translate(2px, 2px);
+} 
+
+/* .icon{
+  margin-right: 5px;
+} */
+.dropdown-menu, li{
+  background-color: rgba(17, 24, 39, 1);
+  color: white;
+}
+.dropdown-item{
+  color: white;
+}
+.dropdown-item:hover{
+  color: #ffd426;
+  background-color: rgba(17, 24, 39, 1);
+}

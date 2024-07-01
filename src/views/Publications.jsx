@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import CardPublications from "../components/CardPublications";
+import '../css/CardPublications.css'
 
 const Publications = () => {
     const { products, getDeveloper, deleteProductById } =
@@ -16,28 +17,29 @@ const Publications = () => {
         return (
             <div>
                 {!getDeveloper ? (
-                    <h2>Inicia sesión para ver tus publicaciones.</h2>
+                    <h2 className="text-dark text-center mt-5">Inicia sesión para ver tus publicaciones.</h2>
                 ) : (
-                    <h3 className="mt-3">NO TIENES PUBLICACIONES</h3>
+                    <h1 className="text-dark text-center mt-5">NO TIENES PUBLICACIONES</h1>
                 )}
             </div>
         );
     }
 
     return (
-          <div className="container">
-            <h2>Mis Publicaciones {getDeveloper.email}</h2>
-            <div className="row row-cols-1 row-cols-md-4 g-4">
-                {userProducts.map((product) => (
+        <div className="container-fluid p-5">
+        <h2>Mis Publicaciones {getDeveloper.email}</h2>
+        <div className="row row-cols-auto d-flex justify-content-center ">
+            {userProducts.map((product) => (
+                <div key={product.id} className="col d-flex align-items-center flex-column" >
                     <CardPublications
-                        key={product.id}
                         product={product}
                         deleteProduct={() => deleteProductById(product.id)}
                     />
-                ))}
-            </div>
+                </div>
+            ))}
         </div>
-    );
+    </div>
+);
 };
 
 export default Publications;

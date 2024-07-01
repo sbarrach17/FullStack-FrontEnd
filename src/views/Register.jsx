@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { validarRut } from "../utils/validarRut";
 import Swal from "sweetalert2";
+import "../css/Register.css";
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const initialForm = {
@@ -107,64 +108,52 @@ const Register = () => {
     };
 
     return (
-        <form onSubmit={handleForm} className="col-10 col-sm-6 col-md-3 m-auto mt-5">
-            <h1>Registrar nuevo usuario</h1>
-            <hr />
-            <div className="form-group mt-1">
-                <label>Nombre</label>
-                <input
-                    value={user.nombre}
-                    onChange={handleUser}
-                    type="text"
-                    name="nombre"
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group mt-1">
-                <label>Apellido</label>
-                <input
-                    value={user.apellido}
-                    onChange={handleUser}
-                    type="text"
-                    name="apellido"
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group mt-1">
-                <label>Rut</label>
-                <input
-                    value={user.rut}
-                    onChange={handleUser}
-                    type="text"
-                    name="rut"
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group mt-1">
-                <label>Email</label>
-                <input
-                    value={user.email}
-                    onChange={handleUser}
-                    type="email"
-                    name="email"
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group mt-1">
-                <label>Password</label>
-                <input
-                    value={user.password}
-                    onChange={handleUser}
-                    type="password"
-                    name="password"
-                    className="form-control"
-                />
-            </div>
-            <button type="submit" className="button mt-3">
-                Registrarme
-            </button>
-        </form>
-    );
+        <div className="containter-registers">
+        <div className="form-containers">
+	<p className="title">CREAR CUENTA</p>
+	<form className="form" onSubmit={handleForm}>
+		<div className="input-group">
+			<label >Nombre</label>
+			<input type="text" name="nombre" onChange={handleUser}  value={user.nombre}/>
+		</div>
+		<div className="input-group">
+			<label >Apellido</label>
+			<input type="text" name="apellido" onChange={handleUser}  value={user.apellido} />
+		</div>
+		<div className="input-group">
+			<label >Rut</label>
+			<input type="text" name="rut" onChange={handleUser}  value={user.rut}/>
+		</div>
+			<div className="input-group">
+			<label >Email</label>
+			<input type="text" name="email" onChange={handleUser}  value={user.email}/>
+		</div>
+		<div className="input-group">
+			<label >Password</label>
+			<input type="password" name="password"onChange={handleUser}   value={user.password}/>
+			<div className="forgot">
+				<a rel="noopener noreferrer" href="#"></a>
+			</div>
+		</div>
+        <button type="submit" className="sign mt-3">
+          REGISTRAR
+        </button>
+	</form>
+	<div className="social-message">
+		<div className="line"></div>
+		<p className="message"></p>
+		<div className="line"></div>
+	</div>
+	<div className="social-icons">
+	
+	
+	
+	</div>
+	
+</div>
+    </div>
+);
 };
+
 
 export default Register;

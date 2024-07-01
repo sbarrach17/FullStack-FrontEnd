@@ -1,79 +1,79 @@
 // import axios from 'axios'
-import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-// import { ENDPOINT } from '../config/constans'
-import { GlobalContext } from '../contexts/GlobalContext'
-import Swal from 'sweetalert2'
+// import { toast } from "react-toastify";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../contexts/GlobalContext";
+import { successToast, errorToast } from "../utils/toast.js"; // Update the path to your toast functions
+import '../css/Login.css'
 
-const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
-const initialForm = { email: '', password: '' }
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const initialForm = { email: "", password: "" };
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [user, setUser] = useState(initialForm)
-  const { login } = useContext(GlobalContext)
+  const navigate = useNavigate();
+  const [user, setUser] = useState(initialForm);
+  const { login } = useContext(GlobalContext);
 
-  const handleUser = (event) => setUser({ ...user, [event.target.name]: event.target.value })
+  const handleUser = (event) =>
+    setUser({ ...user, [event.target.name]: event.target.value });
 
   const handleForm = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!user.email.trim() || !user.password.trim()) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Email y password obligatorias.",
-      });
+      errorToast("Email y password obligatorias.");
       return;
     }
 
     if (!emailRegex.test(user.email)) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "El formato de email no es correcto.",
-      });
+      errorToast("El formato de email no es correcto.");
       return;
     }
 
     try {
       await login(user, navigate);
+      successToast("Bienvenido");
     } catch (error) {
-      console.error('Error during login:', error);
+      errorToast("Email o Contraseña incorrectos");
+      console.error("Error durante login:", error);
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleForm} className='col-10 col-sm-6 col-md-3 m-auto mt-5'>
-      <h1>Iniciar Sesión</h1>
-      <hr />
-      <div className='form-group mt-1 '>
-        <label>Email </label>
-        <input
-          value={user.email}
-          onChange={handleUser}
-          type='email'
-          name='email'
-          className='form-control'
-         
-        />
-      </div>
-      <div className='form-group mt-1 '>
-        <label>Password</label>
-        <input
-          value={user.password}
-          onChange={handleUser}
-          type='password'
-          name='password'
-          className='form-control'
-       
-        />
-      </div>
-      
-      <button type='submit' className='button mt-3' >Iniciar Sesión</button>
-      
-    </form>
-  )
-}
+    <div className="containter-regist">
+ <div className="form-contain">
+	<p className="title">INICIAR SESIÓN</p>
+	<form className="form" onSubmit={handleForm}>
 
-export default Login
+			<div className="input-group">
+			<label >Email</label>
+			<input type="text" name="email" onChange={handleUser}  value={user.email}/>
+		</div>
+		<div className="input-group">
+			<label >Password</label>
+			<input type="password" name="password"onChange={handleUser}   value={user.password}/>
+			<div className="forgot">
+				<a rel="noopener noreferrer" href="#"></a>
+			</div>
+		</div>
+        <button type="submit" className="sign mt-3">
+          ACCEDER
+        </button>
+	</form>
+	<div className="social-message">
+		<div className="line"></div>
+		<p className="message"></p>
+		<div className="line"></div>
+	</div>
+	<div className="social-icons">
+	
+	
+	
+	</div>
+	
+</div>
+    </div>
+  );
+};
+
+export default Login;

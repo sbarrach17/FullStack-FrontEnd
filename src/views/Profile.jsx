@@ -1,43 +1,17 @@
 import React, { useContext } from "react";
-import { GlobalContext } from "..//contexts/GlobalContext";
+import { GlobalContext } from "../contexts/GlobalContext.jsx";
 import EditProfile from "../components/EditProfile";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import '../css/EditProfile.css';
 
 const Profile = () => {
-  const { getDeveloper, editUser } = useContext(GlobalContext);
+  const { getDeveloper } = useContext(GlobalContext);
 
   return (
-    <div className="py-5">
-      <h1>Bienvenido</h1>
-      <div className="d-flex flex-column">
-        <h3 className="d-flex flex-column">
-          <span className="fw-bold">{getDeveloper?.email}</span>
-          {getDeveloper?.nombre} {getDeveloper?.apellido}
-        </h3>
-      </div>
-      <div className="btn-group">
-        <button
-          type="button"
-          className="btn btn-warning dropdown-toggle text-white"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        ><span>
-         <i className="fa-solid fa-sliders text-white"></i> Opciones</span>
-        </button>
-        <ul className="dropdown-menu">
-          <li>
-            <Link className="dropdown-item" to="/agregarProducto">
-              Agregar Productos
-            </Link>
-          </li>
-          <li>
-            <Link className="dropdown-item" to="/publicaciones">
-              Mis Publicaciones
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <EditProfile editUser={editUser} />
+    <div className="me-2 mt-5">
+      <div className="d-flex justify-content-center">
+      <EditProfile />
+      </div>  
     </div>
   );
 };
