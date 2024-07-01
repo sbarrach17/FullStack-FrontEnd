@@ -13,32 +13,9 @@ import CollectionDetails from "./views/CollectionDetails";
 import Cart from "./views/Cart";
 import Favorites from "./views/Favorites";
 import EditProduct from "./components/EditProduct";
-import { useEffect } from "react";
+
 
 const App = () => {
-
-  useEffect(() => {
-    document.title = 'Product Form';
-
-    const getDateServer = async () => {
-      try {
-        const response = await fetch(
-          "https://fullstack-backend-dult.onrender.com"
-        );
-        if (response.ok) {
-          const data = await response.text();
-          console.log("RESPUESTA DEL ENDPOINT", data);
-        } else {
-          console.error("Fallo");
-        }
-      } catch (error) {
-        console.error("Fallo", error);
-      }
-    };
-
-    getDateServer();
-  }, []);
-
     return (
         <>
             <Navigation />
