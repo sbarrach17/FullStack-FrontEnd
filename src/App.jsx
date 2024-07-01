@@ -42,3 +42,20 @@ const App = () => {
 };
 
 export default App;
+
+export const URLBASE = 'https://fullstack-backend-5vo7.onrender.com';
+
+export const ENDPOINT = {
+    login: `${URLBASE}/login`,
+    users: `${URLBASE}/usuarios`,
+    editUser: `${URLBASE}/usuarios`,
+    product: `${URLBASE}/productos`,
+    newProduct: `${URLBASE}/productos`,
+    editProduct: `${URLBASE}/productos`,
+    getProductEmail: `${URLBASE}/productos`,
+    deleteProduct: `${URLBASE}/productos`,
+    getFavorites: `${URLBASE}/favoritos`,
+    addFavorites: `${URLBASE}/favoritos`,
+    deleteFavorites: `${URLBASE}/favoritos`,
+    insertCart: `${URLBASE}/carro`,
+};
