@@ -273,7 +273,7 @@ const Cart = () => {
     return (
         <div>
               {cartItems.length === 0 ? (
-                <p>No hay productos en el carro.</p>
+                <h1 className="text-dark">No hay productos en el carro.</h1>
             ) : (
             <div id="smartwizard">
                 <ul className="nav">
@@ -386,14 +386,14 @@ const Cart = () => {
                                     </label>
                                     <input
                                         type="number"
-                                        maxLength="9"
+                                        maxLength="10"
                                         className="form-control"
-                                        placeholder="+56"                               
+                                                                   
                                         name="numero"
                                         value={formData.numero}
                                         onChange={handleInputChange}
                                     />
-                                    <span>incluir +56</span>
+                                    <span className="text-dark">incluir +56</span>
                                 </div>
                             </div>
                         </div>
