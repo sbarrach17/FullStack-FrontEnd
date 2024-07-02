@@ -56,6 +56,12 @@ const EditProduct = () => {
 
     if (!productData) return <div>Cargando Publicación...</div>;
 
+    const formatCurrency = (value) => {
+        const number = parseFloat(value);
+        if (isNaN(number)) return "";
+        return number.toLocaleString("es-CL", { style: "currency", currency: "CLP" });
+      };
+
     return (
         <div className="containter-register">
         <div className="form-container">
@@ -76,6 +82,7 @@ const EditProduct = () => {
 			<div className="input-group">
 			<label >Valor</label>
 			<input type="number" name="valor" onChange={handleChange}  value={productData.valor}/>
+            <span>{formatCurrency(productData.valor)}</span>
 		</div>
         <div className="input-group">
 			<label >Imagen</label>

@@ -50,12 +50,12 @@ const Navigation = () => {
         </Link>      
         <div className="nav-link dropdown">
     <button className="value dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-      Opciones<i class="fa-solid fa-gear ms-2"></i>
+      Opciones<i className="fa-solid fa-gear ms-2"></i>
     </button>
     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
     <li>
         <Link to="/perfil" className="dropdown-item">
-          Perfíl <i class="fa-solid fa-user-pen ms-2"></i>
+          Perfíl <i className="fa-solid fa-user-pen ms-2"></i>
         </Link>
       </li>
       <li>
@@ -65,7 +65,7 @@ const Navigation = () => {
       </li>
       <li>
         <Link to="/publicaciones" className="dropdown-item">
-          Publicaciones <i class="fa-solid fa-file-pen ms-2"></i>
+          Publicaciones <i className="fa-solid fa-file-pen ms-2"></i>
         </Link>
       </li>     
     </ul>

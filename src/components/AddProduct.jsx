@@ -48,7 +48,7 @@ const AddProduct = () => {
       });
       return;
     }
-    const { marca, descripcion, valor, url, talla, modelo, } = product;
+    const { marca, descripcion, valor, url, talla, modelo } = product;
     if (!marca || !descripcion || !valor || !url || !talla || !modelo) {
       Swal.fire({
         icon: "warning",
@@ -86,42 +86,54 @@ const AddProduct = () => {
       console.error("Error al agregar producto:", error);
     }
   };
+
+  const formatCurrency = (value) => {
+    const number = parseFloat(value);
+    if (isNaN(number)) return "";
+    return number.toLocaleString("es-CL", { style: "currency", currency: "CLP" });
+  };
+
   return (
     <div className="containter-register">
-    <div className="form-container">
-<p className="title">AGREGAR PRODUCTO</p>
-<form className="form" onSubmit={handleFormSubmit}>
-<div className="input-group">
-  <label >Marca</label>
-  <input type="text" name="marca" onChange={handleInputChange}  value={product.marca}/>
-</div>
-<div className="input-group">
-  <label >Modelo</label>
-  <input type="text" name="modelo" onChange={handleInputChange}  value={product.modelo} maxLength="10" />
-</div>
-<div className="input-group">
-  <label >Talla</label>
-  <input type="text" name="talla" onChange={handleInputChange}  value={product.talla}/>
-</div>
-  <div className="input-group">
-  <label >Valor</label>
-  <input type="number" name="valor" onChange={handleInputChange}  value={product.valor}/>
-</div>
-<div className="input-group">
-  <label >Imagen</label>
-  <input type="text" name="url"onChange={handleInputChange}   value={product.url}/>
-</div>
-<div className="input-group">
+      <div className="form-container">
+        <p className="title">AGREGAR PRODUCTO</p>
+        <form className="form" onSubmit={handleFormSubmit}>
+          <div className="input-group">
+            <label>Marca</label>
+            <input type="text" name="marca" onChange={handleInputChange} value={product.marca} />
+          </div>
+          <div className="input-group">
+            <label>Modelo</label>
+            <input type="text" name="modelo" onChange={handleInputChange} value={product.modelo} maxLength="13" />
+          </div>
+          <div className="input-group">
+            <label>Talla</label>
+            <input type="text" name="talla" onChange={handleInputChange} value={product.talla} />
+          </div>
+          <div className="input-group">
+            <label>Valor</label>
+            <input 
+              type="number" 
+              name="valor" 
+              onChange={handleInputChange} 
+              value={product.valor} 
+            />
+            <span>{formatCurrency(product.valor)}</span>
+          </div>
+          <div className="input-group">
+            <label>Imagen</label>
+            <input type="text" name="url" onChange={handleInputChange} value={product.url} />
+          </div>
+          <div className="input-group">
             <label>Descripcion</label>
             <textarea name="descripcion" onChange={handleInputChange} value={product.descripcion} />
           </div>
-
-    <button type="submit" className="sign mt-3">
-      AGREGAR 
-    </button>
-</form>
-</div>
-</div>
+          <button type="submit" className="sign mt-3">
+            AGREGAR
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

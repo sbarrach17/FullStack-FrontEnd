@@ -372,17 +372,32 @@
 }
 .selCollection{
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: start;
   align-items: start;
   margin-left: 6rem;
-  gap: 5px
+  gap: 5px;
+flex-wrap: wrap;
 }
 .boxSelect{
 border: none;
-background-color: rgba(17, 24, 39, 1);
+background-color: rgb(29, 38, 56);
 color: white;
 border-radius: 10px;
 width: 200px;
 height: 30px;
+}
+
+#placeholderCOLOR::placeholder  {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .selCollection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+  }
+ 
 }

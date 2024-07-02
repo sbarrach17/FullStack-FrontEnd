@@ -9,6 +9,7 @@ const Collection = () => {
     const [loading, setLoading] = useState(true);
     const [sortedProducts, setSortedProducts] = useState([]);
     const [sortOption, setSortOption] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const maxProductsPerPage = 15;
 
@@ -23,6 +24,17 @@ const Collection = () => {
 
     useEffect(() => {
         let sortedArray = [...products];
+
+        // Filter products based on search term for both marca and talla
+        if (searchTerm) {
+            sortedArray = sortedArray.filter(product =>
+                product.marca.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                product.talla.toLowerCase().includes(searchTerm.toLowerCase()) 
+            );
+        }
+
+
+
         if (sortOption === "priceAsc") {
             sortedArray.sort((a, b) => a.valor - b.valor);
         } else if (sortOption === "priceDesc") {
@@ -34,10 +46,13 @@ const Collection = () => {
         }
         setSortedProducts(sortedArray);
         setCurrentPage(1); // Reset to first page when sorting option changes
-    }, [sortOption, products]);
+    }, [sortOption,searchTerm, products]);
 
     const handleSortChange = (e) => {
         setSortOption(e.target.value);
+    };
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
     };
 
     // Calculate products to display on current page
@@ -71,16 +86,28 @@ const Collection = () => {
             ) : (
                 <>
                 <div className="selCollection mt-3">
-                    <label >Ordenar por:</label>
-                    <select name="" id="" className="boxSelect" value={sortOption} onChange={handleSortChange}>
-                        <option  value="" disabled></option>
-                        <option  value="priceAsc">Precio Menor a Mayor</option>
-                        <option value="priceDesc">Precio Mayor a Menor</option>
-                        <option value="alphaAsc">Nombre A-Z</option>
-                        <option value="alphaDesc">Nombre Z-A</option>
-                    </select>
-                </div>
-
+                    <div>
+                        {/* <label>Ordenar por:</label> */}
+                        <select p name="" id="" className="boxSelect" value={sortOption} onChange={handleSortChange}>
+                            <option value="" disabled>Ordenar por</option>
+                            <option value="alphaAsc">Nombre A-Z</option>
+                            <option value="alphaDesc">Nombre Z-A</option>
+                            <option value="priceAsc">Precio Menor a Mayor</option>
+                            <option value="priceDesc">Precio Mayor a Menor</option>
+                        </select>
+                        </div>
+                        <div className="search-container">
+                        
+                            <input
+                            id="placeholderCOLOR"
+                                type="text"
+                                placeholder=" Buscar... Marca, Talla"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                className=" boxSelect  "
+                            />
+                        </div>
+                    </div>
                     <div className="container-fluid p-5">
                     <div className="row row-cols-auto d-flex justify-content-center ">
                         {currentProducts.map((product) => (

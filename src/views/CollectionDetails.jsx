@@ -75,7 +75,7 @@ const CollectionDetails = () => {
     };
 
     return (
-        <section className="container-fluid containerDetails p-2">
+        <section className="container-fluid containerDetails p-3">
             <div className="row">
                 <div className="imgContent">
                     <img
@@ -88,6 +88,8 @@ const CollectionDetails = () => {
                     <h1 className="titleCol">{product.marca}</h1>
                     <p className="textContent">{product.descripcion}</p>
                     <div className="textTalla">
+                        <p className="text-start fs-6"> * Todos los productos tienen 30 días de garantía, desde su recepción.</p>
+                       <hr />
                         <p className="text-start text-uppercase">TALLA {product.talla}</p>
                         <p className="text-start text-uppercase">VALOR { formatCurrency (product.valor)}</p>
                     </div>

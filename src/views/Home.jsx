@@ -37,14 +37,14 @@ const Home = () => {
   return (
     <div className='Home'>
     <div className='image-container'>
-      <div className='image-box middle'>
-        <img src='https://i.pinimg.com/736x/bf/dd/32/bfdd3274150f2489dea816e307ba9577.jpg' alt='Image 1' />
-      </div>
-      <div className='image-box'>
-        <img src='https://www.newmundialmotos.com/uploads/RESEG3479Copia_de_Copia_de_Copia_de_Copia_de_Copia_de_Copia_de_Copia_de_Publicaci%C3%B3n_de_Instagram_Moderno_Modular_Marcas_de_Moda_Sostenible_Rojo_y_Crema_(1).jpg' alt='Image 2' />
+      <div className='image-box middle '>
+        <img src='https://images.unsplash.com/photo-1591216098056-b25a0d6ef8d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW90b2ZvdG98ZW58MHx8MHx8&w=1000&q=80' alt='Image 2' />
       </div>
       <div className='image-box '>
-        <img src='https://i.pinimg.com/736x/34/fd/53/34fd5356bfe61f8e71fb7e7c48a09b4b.jpg' alt='Image 3' />
+        <img src='https://images.unsplash.com/photo-1611004061243-b8cd8c3fc7ba?q=80&w=1000&auto=f3fDB8MHxzZWFyY2h8Mnx8Q3Vlcm9zJTIwZGUlMjBtb3RvfGVufDB8fDB8fHww' alt='Image 1' />
+      </div>
+      <div className='image-box '>
+        <img src='https://ae01.alicdn.com/kf/Sd3dd730bafc8453bb315bb0ab35cfbb3M/Traje-de-montar-en-motocicleta-a-prueba-de-fr-o-para-hombres-y-mujeres-traje-de.jpg' alt='Image 3' />
       </div>
     </div>
   </div>

@@ -272,6 +272,9 @@ const Cart = () => {
 
     return (
         <div>
+              {cartItems.length === 0 ? (
+                <p>No hay productos en el carro.</p>
+            ) : (
             <div id="smartwizard">
                 <ul className="nav">
                     <li className="nav-item">
@@ -707,6 +710,7 @@ const Cart = () => {
                     ></div>
                 </div>
             </div>
+             )}
         </div>
     );
 };
