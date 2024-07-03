@@ -28,17 +28,7 @@ const Cart = () => {
         expiracion: "",
         cvv: "",
     });
-    const formatExpiry = (e) => {
-        let value = e.target.value.replace(/\D/g, ""); // Eliminar caracteres no numéricos
-        if (value.length > 5) {
-            value = value.slice(0, 4);
-        }
-        if (value.length > 3) {
-            e.target.value = value.slice(0, 2) + "/" + value.slice(2);
-        } else {
-            e.target.value = value;
-        }
-    };
+
 
     useEffect(() => {
         let total = 0;
@@ -69,6 +59,27 @@ const Cart = () => {
             });
         }
         
+    };
+
+    const handleremoveItemFromCart = (product) => {
+        Swal.fire({
+            title: "Cargando...",
+            text: "Eliminando producto del carro",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+                removeItemFromCart(product);
+                setTimeout(() => {
+                    Swal.close();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Producto eliminado de carro",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    });
+                }, 1000); // Simulate a delay
+            },
+        });
     };
 
     const formatoRut = (rut) => {
@@ -176,11 +187,68 @@ const Cart = () => {
         });
     };
 
-    const handleInsertItem = async (productId) => {
+    // const handleInsertItem = async (productId) => {
+    //     if (!validateFields()) {
+    //         return;
+    //     }
+
+    //     try {
+    //         const result = await Swal.fire({
+    //             title: "¿Está seguro?",
+    //             text: "Se enviará la información al correo proporcionado para realizar la compra.",
+    //             icon: "warning",
+    //             showCancelButton: true,
+    //             confirmButtonText: "Sí, confirmar",
+    //             cancelButtonText: "Cancelar",
+    //         });
+
+    //         if (result.isConfirmed) {
+    //             const itemToAdd = {
+    //                 ...formData,
+    //                 producto_id: productId,
+    //             };
+    //             await insertarAlCarro(itemToAdd);
+    //             Swal.fire({
+    //                 icon: "success",
+    //                 title: "Compra confirmada",
+    //                 text: `La información se ha enviado al correo: ${formData.email}`,
+    //             });
+    //             setFormData({
+    //                 nombre: "",
+    //                 apellido: "",
+    //                 rut: "",
+    //                 email: "",
+    //                 numero: "",
+    //                 region: "",
+    //                 comuna: "",
+    //                 direccion: "",
+    //                 domicilio: "",
+    //                 departamento: "",
+    //                 metodoPago: "",
+    //                 titular: "",
+    //                 ntarjeta: "",
+    //                 expiracion: "",
+    //                 cvv: "",
+    //             });
+    //             setTotalValue(0);
+    //             removeItemFromCart(productId);
+    //             navigate("/collection");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error al insertar ítem en el carrito:", error);
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "Error",
+    //             text: "Error al insertar ítem en el carrito.",
+    //         });
+    //     }
+    // };
+
+    const handleInsertItem = async () => {
         if (!validateFields()) {
             return;
         }
-
+    
         try {
             const result = await Swal.fire({
                 title: "¿Está seguro?",
@@ -190,18 +258,21 @@ const Cart = () => {
                 confirmButtonText: "Sí, confirmar",
                 cancelButtonText: "Cancelar",
             });
-
+    
             if (result.isConfirmed) {
-                const itemToAdd = {
+                const itemsToAdd = cartItems.map(item => ({
                     ...formData,
-                    producto_id: productId,
-                };
-                await insertarAlCarro(itemToAdd);
+                    producto_id: item.id,
+                }));
+    
+                await Promise.all(itemsToAdd.map(itemToAdd => insertarAlCarro(itemToAdd)));
+    
                 Swal.fire({
                     icon: "success",
                     title: "Compra confirmada",
                     text: `La información se ha enviado al correo: ${formData.email}`,
                 });
+    
                 setFormData({
                     nombre: "",
                     apellido: "",
@@ -219,8 +290,9 @@ const Cart = () => {
                     expiracion: "",
                     cvv: "",
                 });
+    
                 setTotalValue(0);
-                removeItemFromCart(productId);
+                removeItemFromCart(); // Función para limpiar el carrito, si está disponible en tu contexto
                 navigate("/collection");
             }
         } catch (error) {
@@ -232,6 +304,7 @@ const Cart = () => {
             });
         }
     };
+
 
     useEffect(() => {
         $(document).ready(function () {
@@ -674,22 +747,26 @@ const Cart = () => {
                                             <strong>
                                                 <p className="mb-0">(IVA Incluido)</p>
                                             </strong>
-                                        </div>
+                                            <button className="btn btn-danger" onClick={() => handleremoveItemFromCart(item.id)}>Eliminar</button>                                        </div>
                                         <span>
                                             <strong>{formatCurrency(item.valor)}</strong>
                                         </span>
                                     </li>
                                 </ul>
-                                  <button
+                              
+                            </div>
+                        ))}
+                         <h3>Total: {formatCurrency(totalValue)}</h3>
+                          <button className="btn btn-success" onClick={() => handleInsertItem(cartItems.map(item => item.id))}>Confirmar Compra</button>
+                          
+                            {/* <button
                                     className="btn btn-success"
                                     onClick={() =>
                                         handleInsertItem(cartItems[0].id)
                                     }
                                 >
                                     Confirmar Compra
-                                </button>
-                            </div>
-                        ))}
+                                </button> */}
                     </div>
                 </div>
             </div>

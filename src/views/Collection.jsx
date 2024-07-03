@@ -11,7 +11,7 @@ const Collection = () => {
     const [sortOption, setSortOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const maxProductsPerPage = 15;
+    const maxProductsPerPage = 12;
 
     useEffect(() => {
         const timer = setTimeout(() => {

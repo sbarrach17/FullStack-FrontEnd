@@ -58,7 +58,7 @@ const EditProfile = () => {
   return (
     
     <div className="form-container">
-    <p className="title">{getDeveloper?.nombre} {getDeveloper?.apellido}</p>
+    <p className="title text-uppercase">{getDeveloper?.nombre} {getDeveloper?.apellido}</p>
     <p className="title">{getDeveloper?.email}</p>
     <p>EDITAR PERFÍL</p>
     <form className="form" onSubmit={handleForm}>

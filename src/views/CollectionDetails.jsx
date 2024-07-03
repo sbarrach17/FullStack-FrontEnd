@@ -6,7 +6,7 @@ import "../css/CollectionDetails.css";
 
 const CollectionDetails = () => {
     const { id } = useParams();
-    const { products, addFavorite, addToCart } = useContext(GlobalContext);
+    const { products, favorites, addFavorite, addToCart } = useContext(GlobalContext);
     const product = products.find((p) => p.id === parseInt(id));
 
     if (!product) {
@@ -34,35 +34,42 @@ const CollectionDetails = () => {
         });
     };
 
-    const handleAddToFavorites = () => {
+    const handleAddToFavorites = async () => {
+        if (favorites.some((fav) => fav.id === product.id)) {
+            Swal.fire({
+                icon: "info",
+                title: "Producto ya en favoritos",
+                text: "Este producto ya está en tu lista de favoritos.",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
         Swal.fire({
             title: "Cargando...",
             text: "Agregando producto a favoritos",
             allowOutsideClick: false,
-            didOpen: () => {
+            didOpen: async () => {
                 Swal.showLoading();
-                addFavorite(product.id)
-                    .then(() => {
-                        Swal.close();
-                        Swal.fire({
-                            icon: "success",
-                            title: "Producto agregado a favoritos",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.close();
-                        console.error(
-                            "Error al agregar producto a favoritos:",
-                            error
-                        );
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "Error al agregar producto a favoritos",
-                        });
+                try {
+                    await addFavorite(product.id);
+                    Swal.close();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Producto agregado a favoritos",
+                        showConfirmButton: false,
+                        timer: 1500,
                     });
+                } catch (error) {
+                    Swal.close();
+                    console.error("Error al agregar producto a favoritos:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Error al agregar producto a favoritos",
+                    });
+                }
             },
         });
     };
