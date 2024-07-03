@@ -11,6 +11,8 @@ const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const maxProductsPerPage = 10;
 
     useEffect(() => {
         const fetchFavorites = async () => {
@@ -56,17 +58,29 @@ const Favorites = () => {
         }
     };
 
+    // Filter favorites by user's email
     const userFavorites = favorites.filter(
         (favorite) => favorite.usuario_email === getDeveloper?.email
     );
 
+    // Pagination logic
+    const indexOfLastProduct = currentPage * maxProductsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - maxProductsPerPage;
+    const currentFavorites = userFavorites.slice(indexOfFirstProduct, indexOfLastProduct);
+    const totalPages = Math.ceil(userFavorites.length / maxProductsPerPage);
+
+    // Function to handle page changes
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     return (
-        <div  className='container-fluid'>
+        <div className='container-fluid'>
             <h1 className='text-center text-dark mt-4'>Mis Favoritos</h1>
             {loading && <p>Cargando Favoritos...</p>}
             {error && <p>Error: {error.message}</p>}
-            <div className="row row-cols-auto d-flex justify-content-center ">
-                {userFavorites.map(favorite => (
+            <div className="row row-cols-auto d-flex justify-content-center">
+                {currentFavorites.map(favorite => (
                     <div key={favorite.favorito_id} className="col d-flex align-items-center flex-column">
                         <CardFavorites 
                             favorite={favorite} 
@@ -74,6 +88,47 @@ const Favorites = () => {
                         />
                     </div>
                 ))}
+            </div>
+            
+            {/* Pagination buttons */}
+            <div className="pagination mt-4 d-flex justify-content-center">
+                <button
+                    className="btn btnPagination mb-4"
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                >
+                    &#60;&#60;
+                </button>
+                <button
+                    className="btn btnPagination mb-4"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    &#60;
+                </button>
+                {[...Array(totalPages).keys()].map((number) => (
+                    <button
+                        key={number + 1}
+                        className={`btn btnPagination mb-4 ${currentPage === number + 1 ? "active" : ""}`}
+                        onClick={() => handlePageChange(number + 1)}
+                    >
+                        {number + 1}
+                    </button>
+                ))}
+                <button
+                    className="btn btnPagination mb-4"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    &#62;
+                </button>
+                <button
+                    className="btn btnPagination mb-4"
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                >
+                    &#62;&#62;
+                </button>
             </div>
         </div>
     );

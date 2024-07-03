@@ -11,7 +11,7 @@ const Collection = () => {
     const [sortOption, setSortOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const maxProductsPerPage = 12;
+    const maxProductsPerPage = 10;
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -88,7 +88,7 @@ const Collection = () => {
                 <div className="selCollection mt-3">
                     <div>
                         {/* <label>Ordenar por:</label> */}
-                        <select p name="" id="" className="boxSelect" value={sortOption} onChange={handleSortChange}>
+                        <select  name="" id="" className="boxSelect" value={sortOption} onChange={handleSortChange}>
                             <option value="" disabled>Ordenar por</option>
                             <option value="alphaAsc">Nombre A-Z</option>
                             <option value="alphaDesc">Nombre Z-A</option>
